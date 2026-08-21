@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OpenEndedDiscovery.ai</title>
+<style>
+  :root { color-scheme: light dark;
+    --bg: #fdfdfc; --fg: #1a1a18; --muted: #6b6b66; --line: #e4e4df; --accent: #0b5563; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #131312; --fg: #e8e8e4; --muted: #93938c; --line: #2a2a27; --accent: #6fc3d4; }
+  }
+  * { margin: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--fg);
+    font: 17px/1.6 Georgia, 'Times New Roman', serif;
+    max-width: 40rem; margin: 0 auto; padding: 14vh 1.5rem 4rem; }
+  h1 { font-size: 1.6rem; font-weight: normal; letter-spacing: 0.01em; }
+  h1 .tld { color: var(--muted); }
+  p.tag { color: var(--muted); margin-top: 0.5rem; }
+  ul { list-style: none; margin-top: 3rem; padding: 0; }
+  li { padding: 1.1rem 0; border-top: 1px solid var(--line); }
+  li:last-child { border-bottom: 1px solid var(--line); }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover, a:focus { text-decoration: underline; }
+  .desc { display: block; color: var(--muted); font-size: 0.92rem; }
+</style>
+</head>
+<body>
+  <h1>OpenEndedDiscovery<span class="tld">.ai</span></h1>
+  <p class="tag">Research on open-ended scientific discovery with LLM agents.</p>
+  <ul>
+    <li>
+      <a href="/contrastive-discovery/">Contrastive Discovery</a>
+      <span class="desc">Open-ended discovery over competing explanations, not one hypothesis at a time.</span>
+    </li>
+  </ul>
+</body>
+</html>
