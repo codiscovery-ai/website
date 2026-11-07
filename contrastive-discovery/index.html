@@ -36,11 +36,15 @@
   <meta property="og:url" content="https://codiscovery.ai/contrastive-discovery/">
   <meta property="og:title" content="Contrastive Discovery">
   <meta property="og:description" content="Open-ended scientific discovery over competing explanations. NeurIPS 2026.">
-  <meta property="og:image" content="https://codiscovery.ai/contrastive-discovery/assets/teaser.png">
+  <meta property="og:image" content="https://codiscovery.ai/contrastive-discovery/assets/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Contrastive Discovery, NeurIPS 2026: paper Figure 1, where a contrast set of three explanations resolves to H2 on the same evidence that leaves a pointwise agent unresolved.">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://codiscovery.ai/contrastive-discovery/assets/social-card.png">
 
   <!-- Favicon: three belief bars (inline SVG, no file needed) -->
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23fbfaf7'/%3E%3Crect x='6' y='7' width='8' height='5' rx='1.5' fill='%23c8412c'/%3E%3Crect x='6' y='14' width='20' height='5' rx='1.5' fill='%231f5fa8'/%3E%3Crect x='6' y='21' width='6' height='5' rx='1.5' fill='%23a9a49b'/%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23fbfaf7'/%3E%3Crect x='6' y='7' width='8' height='5' rx='1.5' fill='%23ee220c'/%3E%3Crect x='6' y='14' width='20' height='5' rx='1.5' fill='%230076ba'/%3E%3Crect x='6' y='21' width='6' height='5' rx='1.5' fill='%23929292'/%3E%3C/svg%3E">
 
   <!-- Asset paths are relative (no leading slash) so the page works at
        http://localhost:8000/contrastive-discovery/ as well as in production. -->
@@ -106,11 +110,12 @@
 </nav>
 
 <!-- ======================================================================
-     THE PROBLEM: scroll story.  The figure on the right (top on phones) stays
-     pinned while the text steps scroll past; each step sets data-step on
-     #stage, and the STATES table in the script at the bottom says what the
-     figure shows at each step. All numbers are from paper Figure 1.
-     Without JavaScript the figure shows the final step.
+     THE PROBLEM: scroll story.  The stage on the right (top on phones) stays
+     pinned while the text steps scroll past. Each explanation is a line on one
+     scatter plot, in the paper figure's colors; the STATES table in the script
+     at the bottom says what the stage shows at each step. All numbers are from
+     paper Figure 1, and the dots are its scatter (de-trended, so r = 0).
+     Without JavaScript the stage shows the final step.
      ====================================================================== -->
 <section class="story" id="problem">
   <div class="wrap">
@@ -120,70 +125,101 @@
 
   <div class="wrap wide story-inner">
     <div class="story-stage">
-      <div class="stage" id="stage" data-step="5" aria-live="polite">
+      <div class="stage is-cont ev-on" id="stage" data-step="5" data-verdict="good">
         <div class="stage-top">
-          <span class="agent" aria-hidden="true">
-            <svg viewBox="0 0 40 40"><line x1="20" y1="3" x2="20" y2="9" stroke="#e67e22" stroke-width="2.5"/><circle cx="20" cy="4" r="3" fill="#e67e22"/><rect x="5" y="9" width="30" height="26" rx="7" fill="#e67e22"/><rect x="9" y="13" width="22" height="18" rx="4" fill="#fde9a8"/><circle cx="15.5" cy="20" r="2.6" fill="#1d1b18"/><circle cx="24.5" cy="20" r="2.6" fill="#1d1b18"/><path d="M15 25.5q5 3.5 10 0" stroke="#1d1b18" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>
-          </span>
-          <span class="mode" data-mode-label>Contrastive Discovery</span>
-          <span class="ev-chip" data-ev>Same evidence</span>
+          <span class="agent" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M20 4v6" stroke="#f27200" stroke-width="2.4"/><circle cx="20" cy="4" r="3" fill="#f27200"/><rect x="5" y="10" width="30" height="25" rx="7" fill="#fff5a3" stroke="#f27200" stroke-width="3"/><circle cx="14.5" cy="20" r="2.6" fill="#f27200"/><circle cx="25.5" cy="20" r="2.6" fill="#f27200"/><path d="M14.5 26q5.5 4 11 0" stroke="#f27200" stroke-width="2.2" fill="none" stroke-linecap="round"/></svg></span>
+          <span class="mode" data-mode>Contrastive Discovery</span>
+          <span class="ev-chip on" data-chip>Same evidence</span>
         </div>
-
-        <p class="stage-label" data-label>After the same evidence</p>
-        <ul class="rows">
-          <li class="row" data-row="0">
-            <span class="circ">H<sub>1</sub></span>
-            <span class="txt">X is positively correlated with Y</span>
-            <span class="bar"><i></i></span><span class="val">0.07</span>
+        <svg class="plot" viewBox="0 0 520 268" role="img" aria-label="Scatter plot of Y against X with no trend, correlation r approximately 0. Three lines show the explanations: H1 rising, H2 flat, H3 falling.">
+          <path class="p-ax" d="M52 14 V250 H506"/><text class="p-axl" x="40" y="30">Y</text><text class="p-axl" x="510" y="239" text-anchor="end">X</text>
+          <rect class="p-band" x="66" y="118" width="392" height="32" rx="16"/>
+          <path class="p-fit" d="M70 134 H454" pathLength="1"/>
+          <g class="p-dots">
+            <circle class="p-dot" cx="89.8" cy="142.0" r="6.2" style="--i:0"/>
+            <circle class="p-dot" cx="96.9" cy="122.0" r="6.2" style="--i:1"/>
+            <circle class="p-dot" cx="125.3" cy="155.7" r="6.2" style="--i:2"/>
+            <circle class="p-dot" cx="134.3" cy="113.6" r="6.2" style="--i:3"/>
+            <circle class="p-dot" cx="145.2" cy="163.5" r="6.2" style="--i:4"/>
+            <circle class="p-dot" cx="171.7" cy="147.2" r="6.2" style="--i:5"/>
+            <circle class="p-dot" cx="176.8" cy="98.2" r="6.2" style="--i:6"/>
+            <circle class="p-dot" cx="203.3" cy="124.9" r="6.2" style="--i:7"/>
+            <circle class="p-dot" cx="223.9" cy="158.7" r="6.2" style="--i:8"/>
+            <circle class="p-dot" cx="232.9" cy="84.7" r="6.2" style="--i:9"/>
+            <circle class="p-dot" cx="251.6" cy="137.4" r="6.2" style="--i:10"/>
+            <circle class="p-dot" cx="276.1" cy="118.2" r="6.2" style="--i:11"/>
+            <circle class="p-dot" cx="281.3" cy="172.1" r="6.2" style="--i:12"/>
+            <circle class="p-dot" cx="305.8" cy="125.9" r="6.2" style="--i:13"/>
+            <circle class="p-dot" cx="312.9" cy="149.8" r="6.2" style="--i:14"/>
+            <circle class="p-dot" cx="337.4" cy="103.6" r="6.2" style="--i:15"/>
+            <circle class="p-dot" cx="358.0" cy="189.3" r="6.2" style="--i:16"/>
+            <circle class="p-dot" cx="361.2" cy="115.4" r="6.2" style="--i:17"/>
+            <circle class="p-dot" cx="389.6" cy="141.1" r="6.2" style="--i:18"/>
+            <circle class="p-dot" cx="402.5" cy="109.0" r="6.2" style="--i:19"/>
+            <circle class="p-dot" cx="415.4" cy="154.8" r="6.2" style="--i:20"/>
+            <circle class="p-dot" cx="437.9" cy="120.6" r="6.2" style="--i:21"/>
+          </g>
+          <g class="hyp drawn dim" data-h="1"><path class="hyp-line pos" d="M74 218 L452 50" pathLength="1"/><g class="hyp-tag" transform="translate(472 50)"><circle r="15"/><text y="5" text-anchor="middle">H<tspan dy="3" font-size="10">1</tspan></text></g></g>
+          <g class="hyp drawn win" data-h="2"><path class="hyp-line flat" d="M74 134 L452 134" pathLength="1"/><g class="hyp-tag" transform="translate(472 134)"><circle r="15"/><text y="5" text-anchor="middle">H<tspan dy="3" font-size="10">2</tspan></text></g></g>
+          <g class="hyp drawn dim" data-h="3"><path class="hyp-line neg" d="M74 50 L452 218" pathLength="1"/><g class="hyp-tag" transform="translate(472 218)"><circle r="15"/><text y="5" text-anchor="middle">H<tspan dy="3" font-size="10">3</tspan></text></g></g>
+          <g class="r-tag"><rect x="226" y="2" width="94" height="34" rx="17"/><text x="273" y="25" text-anchor="middle"><tspan font-style="italic">r</tspan> &asymp; 0</text></g>
+        </svg>
+        <p class="stage-label" data-label>Belief after the same evidence</p>
+        <ul class="hrows">
+          <li class="hrow" data-row="0" style="--v:0.07">
+            <span class="ring"><b class="h">H<sub>1</sub></b><b class="q">?</b></span>
+            <span class="stmt"><svg class="mp" viewBox="0 0 40 28" aria-hidden="true"><path d="M3 2 V25 H39" class="mp-ax"/><path d="M8 22 L36 5" class="mp-l pos" pathLength="1"/></svg><span class="h"><span class="xw">&ldquo;X is </span><em class="ph pos">positively correlated</em><span class="xw"> with Y&rdquo;</span></span><span class="q">Never stated</span></span>
+            <span class="mk bad" aria-hidden="true"><svg viewBox="0 0 24 24"><path class="ok" d="M6.5 12.5l3.6 3.8 7.4-8.6"/><path class="no" d="M8 8l8 8M16 8l-8 8"/></svg></span>
+            <span class="bb red"><i></i><span class="bv">0.07</span></span>
           </li>
-          <li class="row" data-row="1">
-            <span class="circ"><b class="h">H<sub>2</sub></b><b class="q">?</b></span>
-            <span class="txt"><b class="h">X is not correlated with Y</b><b class="q">?</b></span>
-            <span class="bar"><i></i></span><span class="val">0.81</span>
+          <li class="hrow" data-row="1" style="--v:0.81">
+            <span class="ring"><b class="h">H<sub>2</sub></b><b class="q">?</b></span>
+            <span class="stmt"><svg class="mp" viewBox="0 0 40 28" aria-hidden="true"><path d="M3 2 V25 H39" class="mp-ax"/><path d="M8 14 L36 14" class="mp-l flat" pathLength="1"/></svg><span class="h"><span class="xw">&ldquo;X is </span><em class="ph flat">not correlated</em><span class="xw"> with Y&rdquo;</span></span><span class="q">Never stated</span></span>
+            <span class="mk ok" aria-hidden="true"><svg viewBox="0 0 24 24"><path class="ok" d="M6.5 12.5l3.6 3.8 7.4-8.6"/><path class="no" d="M8 8l8 8M16 8l-8 8"/></svg></span>
+            <span class="bb blue"><i></i><span class="bv">0.81</span></span>
           </li>
-          <li class="row" data-row="2">
-            <span class="circ"><b class="h">H<sub>3</sub></b><b class="q">?</b></span>
-            <span class="txt"><b class="h">X is negatively correlated with Y</b><b class="q">?</b></span>
-            <span class="bar"><i></i></span><span class="val">0.12</span>
+          <li class="hrow" data-row="2" style="--v:0.12">
+            <span class="ring"><b class="h">H<sub>3</sub></b><b class="q">?</b></span>
+            <span class="stmt"><svg class="mp" viewBox="0 0 40 28" aria-hidden="true"><path d="M3 2 V25 H39" class="mp-ax"/><path d="M8 6 L36 23" class="mp-l neg" pathLength="1"/></svg><span class="h"><span class="xw">&ldquo;X is </span><em class="ph neg">negatively correlated</em><span class="xw"> with Y&rdquo;</span></span><span class="q">Never stated</span></span>
+            <span class="mk gray" aria-hidden="true"><svg viewBox="0 0 24 24"><path class="ok" d="M6.5 12.5l3.6 3.8 7.4-8.6"/><path class="no" d="M8 8l8 8M16 8l-8 8"/></svg></span>
+            <span class="bb gray"><i></i><span class="bv">0.12</span></span>
           </li>
         </ul>
-
-        <div class="verdicts">
-          <p class="verdict bad">H<sub>1</sub> rejected. What&rsquo;s true instead? <b>Unknown.</b></p>
-          <p class="verdict good">Resolved to H<sub>2</sub>. H<sub>1</sub> ruled out.</p>
+        <div class="verdicts" aria-live="polite">
+          <p class="verdict bad">Unresolved<span>H<sub>1</sub> rejected; alternatives never stated</span></p>
+          <p class="verdict good">Resolved to H<sub>2</sub><span>H<sub>1</sub> ruled out</span></p>
         </div>
-
-        <ol class="dots" aria-hidden="true"><li></li><li></li><li></li><li></li><li></li></ol>
       </div>
     </div>
 
     <div class="story-steps">
-      <div class="story-step" data-step="1">
+      <div class="story-step" data-step="1"><div class="step-text">
         <h3>An agent proposes a hypothesis</h3>
-        <p>Most LLM discovery agents explore a dataset by proposing one hypothesis at a time, such as
-          &ldquo;X is positively correlated with Y,&rdquo; and testing it. Before the test, its belief in H<sub>1</sub> is 0.73.</p>
-      </div>
-      <div class="story-step" data-step="2">
+        <p>Most LLM discovery agents explore a dataset by proposing one hypothesis at a time, such as &ldquo;X is
+          <em class="ph pos">positively correlated</em> with Y,&rdquo; and testing it. Before the test, its belief in H<sub>1</sub> is 0.64.</p>
+      </div></div>
+      <div class="story-step" data-step="2"><div class="step-text">
         <h3>It runs an experiment</h3>
-        <p>Coder, analyst, reviewer, and reviser agents write and run an analysis on the data, producing evidence.</p>
-      </div>
-      <div class="story-step" data-step="3">
+        <p>Coder, analyst, reviewer, and reviser agents write and run an analysis on the data. Here the points show no
+          trend: the correlation is <i>r</i> &asymp; 0.</p>
+      </div></div>
+      <div class="story-step" data-step="3"><div class="step-text">
         <h3>The evidence says no. Then what?</h3>
-        <p>Belief in H<sub>1</sub> falls to 0.20, so the agent records a rejection. The evidence may bear on the
-          alternatives, but with only H<sub>1</sub> on the table the agent learns what is unlikely, not what the evidence
-          supports instead.</p>
+        <p>Belief in H<sub>1</sub> falls to 0.07, so the agent records a rejection. The evidence bears on the alternatives
+          too, but with only H<sub>1</sub> on the table the agent learns what is unlikely, not what the evidence supports instead.</p>
         <p class="aside">This is the common case: 89% of the findings a pointwise agent ranks as most surprising are rejections.</p>
-      </div>
-      <div class="story-step" data-step="4">
+      </div></div>
+      <div class="story-step" data-step="4"><div class="step-text">
         <h3>Write out the alternatives</h3>
-        <p>Contrastive Discovery replaces the single hypothesis with a <strong>contrast set</strong>: the competing
-          explanations for the same question. Belief is now spread across all of them.</p>
-      </div>
-      <div class="story-step" data-step="5">
+        <p>Contrastive Discovery replaces the single hypothesis with a <strong>contrast set</strong>: X is
+          <em class="ph pos">positively correlated</em>, <em class="ph flat">not correlated</em>, or
+          <em class="ph neg">negatively correlated</em> with Y. Belief is now spread across all three.</p>
+      </div></div>
+      <div class="story-step" data-step="5"><div class="step-text">
         <h3>Same evidence, an answer</h3>
         <p>Belief moves from H<sub>1</sub> to H<sub>2</sub>, which now holds 0.81. The question resolves to H<sub>2</sub>
           and H<sub>1</sub> is ruled out, so one experiment both rules out an explanation and identifies the best-supported one.</p>
-      </div>
+      </div></div>
     </div>
   </div>
 </section>
@@ -239,21 +275,23 @@
     </p>
   </div>
 
-  <!-- Paper Figure 1 (assets/teaser.png): the full agent loop -->
+  <!-- Paper Figure 1 (assets/teaser.png, from the paper's assets/main-figure-v4.pdf): the full agent loop.
+       wide-fig lets it scroll sideways on phones instead of shrinking past legibility. -->
   <div class="wrap wide">
     <figure class="fig">
-      <div class="panel">
-        <img src="assets/teaser.png" loading="lazy" decoding="async" alt="Left: a hypothesis generator builds a contrast set of three competing explanations from a dataset, and a team of agents (coder, analyst, reviewer, reviser) produces experimental evidence. Right, top: Contrastive Discovery updates belief over all three explanations, moving the lead from H1 (0.64) to H2 (0.81). Right, bottom: pointwise discovery tracks only H1, which falls from 0.73 to 0.20, so H1 is rejected but the alternatives remain unknown." width="2600" height="1200">
+      <div class="panel wide-fig">
+        <img src="assets/teaser.png" loading="lazy" decoding="async" alt="A hypothesis generator reads a dataset and proposes explanations for how X relates to Y. Top lane, Contrastive Discovery: three competing explanations, H1 positively correlated (prior 0.64), H2 not correlated (0.22), H3 negatively correlated (0.14). Experimental evidence from a team of agents shows a flat scatter plot with r approximately 0. Afterward belief is H1 0.07, H2 0.81, H3 0.12, so the question is resolved to H2. Bottom lane, Pointwise: only H1 is stated, its belief falls from 0.64 to 0.07, and the alternatives are never stated, so the question is unresolved." width="2639" height="1222">
       </div>
+      <p class="swipe-hint" aria-hidden="true">Swipe to see the full figure &rarr;</p>
       <figcaption>
         <b>A contrast set turns a rejection into a resolution.</b>
-        <em>Left:</em> a hypothesis generator proposes a contrast set of three competing explanations
+        A hypothesis generator proposes a contrast set of three competing explanations
         (H<sub>1</sub>&ndash;H<sub>3</sub>) for how X relates to Y, and coder, analyst, reviewer, and reviser agents run an
         experiment that produces evidence.
-        <em>Right:</em> Contrastive Discovery updates belief over all three explanations and moves the lead from
+        Contrastive Discovery updates belief over all three explanations and moves the lead from
         H<sub>1</sub> (0.64) to H<sub>2</sub> (0.81), so the question resolves to H<sub>2</sub> and H<sub>1</sub> is ruled out.
-        Pointwise discovery updates belief only in H<sub>1</sub> (0.73 to 0.20), so it records a rejection and leaves the
-        alternatives unknown.
+        Pointwise discovery updates belief only in H<sub>1</sub> (0.64 to 0.07), so it records a rejection but leaves the
+        question unresolved.
       </figcaption>
     </figure>
   </div>
@@ -272,9 +310,9 @@
         <div class="walk-vis">
           <p class="vis-q">How does X relate to Y?</p>
           <ol class="alts">
-            <li>X is positively correlated with Y</li>
-            <li>X is not correlated with Y</li>
-            <li>X is negatively correlated with Y</li>
+            <li data-dir="pos">X is <em class="ph pos">positively correlated</em> with Y</li>
+            <li data-dir="flat">X is <em class="ph flat">not correlated</em> with Y</li>
+            <li data-dir="neg">X is <em class="ph neg">negatively correlated</em> with Y</li>
           </ol>
         </div>
       </li>
@@ -283,22 +321,22 @@
         <div class="walk-text">
           <span class="n">2</span>
           <h3>Measure belief before and after the experiment</h3>
-          <p>An LLM splits 100 points of belief across the explanations, once before the agent runs its
+          <p>An LLM splits its belief across the explanations so that it sums to 1, once before the agent runs its
             experiment and once after it sees the results.</p>
         </div>
         <div class="walk-vis">
-          <!-- --w is the belief in percent -->
-          <div class="beliefs" role="img" aria-label="Belief before the experiment: H1 64%, H2 22%, H3 14%. After: H1 7%, H2 81%, H3 12%.">
+          <!-- --w is the belief in percent; .top = leading (blue), .out = ruled out (red) -->
+          <div class="beliefs" role="img" aria-label="Belief before the experiment: H1 0.64, H2 0.22, H3 0.14. After: H1 0.07, ruled out; H2 0.81, resolved; H3 0.12.">
             <span></span><span class="bh">Before</span><span class="bh">After</span>
-            <span class="hl">H1</span>
-            <span class="b top" style="--w:64"><i></i>64%</span>
-            <span class="b out" style="--w:7"><i></i>7%</span>
-            <span class="hl">H2</span>
-            <span class="b" style="--w:22"><i></i>22%</span>
-            <span class="b top" style="--w:81"><i></i>81%</span>
-            <span class="hl">H3</span>
-            <span class="b" style="--w:14"><i></i>14%</span>
-            <span class="b" style="--w:12"><i></i>12%</span>
+            <span class="hl pos">H1</span>
+            <span class="b top" style="--w:64"><i></i>0.64</span>
+            <span class="b out" style="--w:7"><b class="m bad"></b><i></i>0.07</span>
+            <span class="hl flat">H2</span>
+            <span class="b" style="--w:22"><i></i>0.22</span>
+            <span class="b top" style="--w:81"><b class="m ok"></b><i></i>0.81</span>
+            <span class="hl neg">H3</span>
+            <span class="b" style="--w:14"><i></i>0.14</span>
+            <span class="b" style="--w:12"><b class="m gray"></b><i></i>0.12</span>
           </div>
         </div>
       </li>
@@ -307,7 +345,7 @@
         <div class="walk-text">
           <span class="n">3</span>
           <h3>Read off what was learned</h3>
-          <p>When one explanation ends up with at least 80% of the belief, the question is <strong>resolved</strong>.
+          <p>When one explanation ends up with at least 0.80 of the belief, the question is <strong>resolved</strong>.
             Here the evidence moved support from H1 to H2, a <strong>corrective</strong> resolution.
             A pointwise agent testing only H1 sees the same evidence and records just &ldquo;H1 rejected.&rdquo;</p>
         </div>
@@ -344,43 +382,44 @@
     </details>
 
     <!-- Example contrast sets: verbatim agent outputs from the paper's appendix ("Example Contrast Sets").
-         To add one, copy an <article class="cset"> block; each alternative is one <li>. -->
+         To add one, copy an <article class="cset"> block; each alternative is one <li>. data-dir on an <li>
+         (pos, flat, neg, or curve) gives it the figure's color and mini-plot for that direction. -->
     <h3 class="sub">Contrast sets from four datasets</h3>
     <div class="cset-grid">
       <article class="cset">
         <p class="cset-domain">BLADE Mortgage</p>
         <p class="cset-q">Given a poor credit score, self-employment status leads to&hellip;</p>
         <ol class="alts">
-          <li>Higher denial rates than non-self-employed</li>
-          <li>No different denial rates</li>
-          <li>Lower denial rates than non-self-employed</li>
+          <li data-dir="pos">Higher denial rates than non-self-employed</li>
+          <li data-dir="flat">No different denial rates</li>
+          <li data-dir="neg">Lower denial rates than non-self-employed</li>
         </ol>
       </article>
       <article class="cset">
         <p class="cset-domain">Materials Project</p>
         <p class="cset-q">Direct-gap vs. indirect-gap materials, Fermi energy is&hellip;</p>
         <ol class="alts">
-          <li>Higher in direct-gap materials</li>
-          <li>Lower in direct-gap materials</li>
-          <li>Not substantially different</li>
+          <li data-dir="pos">Higher in direct-gap materials</li>
+          <li data-dir="neg">Lower in direct-gap materials</li>
+          <li data-dir="flat">Not substantially different</li>
         </ol>
       </article>
       <article class="cset">
         <p class="cset-domain">SDSS Galaxy</p>
         <p class="cset-q">Controlling for galaxy axis ratios, the redshift effect on stellar velocity dispersion&hellip;</p>
         <ol class="alts">
-          <li>Increases (strengthens)</li>
-          <li>Decreases (attenuates)</li>
-          <li>Disappears</li>
+          <li data-dir="pos">Increases (strengthens)</li>
+          <li data-dir="neg">Decreases (attenuates)</li>
+          <li data-dir="flat">Disappears</li>
         </ol>
       </article>
       <article class="cset">
         <p class="cset-domain">NLS Raw</p>
         <p class="cset-q">Trend in vehicle market value across 1985 / 1990 / 1996 is&hellip;</p>
         <ol class="alts">
-          <li>Significant linear positive</li>
-          <li>Significant linear negative</li>
-          <li>Nonlinear or no significant trend</li>
+          <li data-dir="pos">Significant linear positive</li>
+          <li data-dir="neg">Significant linear negative</li>
+          <li data-dir="curve">Nonlinear or no significant trend</li>
         </ol>
       </article>
     </div>
@@ -736,58 +775,116 @@
     });
   }
 
-  // Scroll story (#problem). Each entry: mode, evidence-chip text, label above the bars,
-  // and for rows H1..H3 either a belief value with a color (top = blue, out = red),
-  // "q" for an unnamed alternative, or null for hidden. Numbers are from paper Figure 1.
+  // Scroll story (#problem). For each step: mode, evidence chip, label above the rows, whether the
+  // data points (and the dashed fit line) show, each line's look ('' hidden, on, rej, dim, win),
+  // and for rows H1..H3 either [belief, bar color, mark], 'q' for an unstated alternative, or null
+  // for hidden. Numbers are from paper Figure 1.
   (function () {
     var STATES = {
-      1: { mode: 'Pointwise', ev: '', label: 'Belief before the experiment', verdict: '',
-           rows: [[0.73, 'top'], null, null] },
-      2: { mode: 'Pointwise', ev: 'Experiment run', label: 'Belief before the experiment', verdict: '',
-           rows: [[0.73, 'top'], null, null] },
-      3: { mode: 'Pointwise', ev: 'Experiment run', label: 'Belief after the evidence', verdict: 'bad',
-           rows: [[0.20, 'out'], 'q', 'q'] },
-      4: { mode: 'Contrastive Discovery', ev: '', label: 'Belief before the experiment', verdict: '',
-           rows: [[0.64, 'top'], [0.22, ''], [0.14, '']] },
-      5: { mode: 'Contrastive Discovery', ev: 'Same evidence', label: 'Belief after the same evidence', verdict: 'good',
-           rows: [[0.07, 'out'], [0.81, 'top'], [0.12, '']] }
+      1: { cont: false, chip: '', label: 'Belief before the experiment', data: false, fit: false, verdict: '',
+           lines: ['on', '', ''], rows: [[0.64, 'blue', ''], null, null] },
+      2: { cont: false, chip: 'Experiment run', label: 'Belief before the experiment', data: true, fit: true, verdict: '',
+           lines: ['on', '', ''], rows: [[0.64, 'blue', ''], null, null] },
+      3: { cont: false, chip: 'Experiment run', label: 'Belief after the evidence', data: true, fit: true, verdict: 'bad',
+           lines: ['rej', '', ''], rows: [[0.07, 'red', 'bad'], 'q', 'q'], delay: 500 },
+      4: { cont: true, chip: '', label: 'Belief before the experiment', data: false, fit: false, verdict: '',
+           lines: ['on', 'on', 'on'], rows: [[0.64, 'blue', ''], [0.22, 'gray', ''], [0.14, 'gray', '']] },
+      5: { cont: true, chip: 'Same evidence', label: 'Belief after the same evidence', data: true, fit: false, verdict: 'good',
+           lines: ['dim', 'win', 'dim'], rows: [[0.07, 'red', 'bad'], [0.81, 'blue', 'ok'], [0.12, 'gray', 'gray']], delay: 1000 }
     };
     var stage = document.getElementById('stage');
     var steps = Array.prototype.slice.call(document.querySelectorAll('.story-step'));
-    if (!stage || !('IntersectionObserver' in window)) return;
-    var rows = stage.querySelectorAll('.row');
+    if (!stage || !steps.length) return;
+    var pinned = document.querySelector('.story-stage');
+    var rows = Array.prototype.slice.call(stage.querySelectorAll('.hrow'));
+    var hyps = Array.prototype.slice.call(stage.querySelectorAll('.hyp'));
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var phone = window.matchMedia('(max-width: 860px)');
+    var cur = 0;
 
-    function show(n) {
+    // Count a belief value up or down to its new value.
+    function tween(el, to, delay) {
+      cancelAnimationFrame(el._raf);
+      var from = parseFloat(el.textContent);
+      if (isNaN(from) || reduce) { el.textContent = to.toFixed(2); return; }
+      var t0 = performance.now() + (delay || 0);
+      (function f(t) {
+        var k = Math.max(0, Math.min(1, (t - t0) / 800)), e = 1 - Math.pow(1 - k, 3);
+        el.textContent = (from + (to - from) * e).toFixed(2);
+        if (k < 1) el._raf = requestAnimationFrame(f);
+      })(performance.now());
+    }
+
+    function setRow(li, r, delay) {
+      var bb = li.querySelector('.bb'), bv = li.querySelector('.bv'), mk = li.querySelector('.mk');
+      li.classList.toggle('hidden', r === null);
+      li.classList.toggle('unknown', r === 'q');
+      li.style.setProperty('--bd', delay + 'ms');
+      if (r && r !== 'q') {
+        bb.className = 'bb ' + r[1];
+        li.style.setProperty('--v', r[0]);
+        if (bv.textContent === '?') bv.textContent = '0.00';
+        tween(bv, r[0], delay);
+        mk.className = 'mk' + (r[2] ? ' ' + r[2] : '');
+      } else {
+        mk.className = 'mk';
+        if (r === 'q') bv.textContent = '?';
+        else { li.style.setProperty('--v', 0); bv.textContent = '0.00'; }
+      }
+    }
+
+    function apply(n) {
       var st = STATES[n];
       stage.setAttribute('data-step', n);
-      stage.setAttribute('data-verdict', st.verdict);
-      stage.querySelector('[data-mode-label]').textContent = st.mode;
-      stage.classList.toggle('is-cont', st.mode !== 'Pointwise');
-      var ev = stage.querySelector('[data-ev]');
-      ev.textContent = st.ev || ev.textContent;
-      ev.classList.toggle('on', !!st.ev);
+      stage.classList.toggle('is-cont', st.cont);
+      stage.querySelector('[data-mode]').textContent = st.cont ? 'Contrastive Discovery' : 'Pointwise';
+      var chip = stage.querySelector('[data-chip]');
+      if (st.chip) chip.textContent = st.chip;
+      chip.classList.toggle('on', !!st.chip);
       stage.querySelector('[data-label]').textContent = st.label;
-      st.rows.forEach(function (r, i) {
-        var row = rows[i];
-        row.className = 'row' + (r === null ? ' hidden' : r === 'q' ? ' unknown' : r[1] ? ' ' + r[1] : '');
-        if (r === 'q') row.querySelector('.val').textContent = '?';
-        else if (r) {
-          row.style.setProperty('--v', r[0]);
-          row.querySelector('.val').textContent = r[0].toFixed(2);
-        }
+      stage.classList.toggle('ev-on', st.data);
+      stage.classList.toggle('fit-on', st.fit);
+      hyps.forEach(function (h, i) {
+        var s = st.lines[i];
+        h.setAttribute('class', 'hyp' + (s ? ' drawn ' + s : ''));
+        h.style.setProperty('--d', (n === 4 ? i * 180 : 0) + 'ms');
       });
+      rows.forEach(function (li, i) { setRow(li, st.rows[i], st.delay || 0); });
+      stage.setAttribute('data-verdict', st.verdict);
+    }
+
+    // Switching between Pointwise and Contrastive fades the stage out and back in.
+    function show(n) {
+      var swap = cur && STATES[cur].cont !== STATES[n].cont && !reduce;
+      cur = n;
       steps.forEach(function (el) { el.classList.toggle('is-active', +el.getAttribute('data-step') === n); });
+      if (!swap) { apply(n); return; }
+      stage.classList.add('swap');
+      setTimeout(function () { if (cur === n) apply(n); stage.classList.remove('swap'); }, 180);
+    }
+
+    // The current step is the last one whose top has crossed a line: mid-screen on desktop, and on
+    // phones (stage pinned on top) partway down the space below the stage.
+    function update() {
+      var line;
+      if (phone.matches) {
+        var b = pinned.getBoundingClientRect().bottom;
+        line = b + (window.innerHeight - b) * 0.45;
+      } else line = window.innerHeight * 0.5;
+      var n = 1;
+      steps.forEach(function (el, i) { if (el.getBoundingClientRect().top <= line) n = i + 1; });
+      if (n !== cur) show(n);
     }
 
     document.documentElement.classList.add('story-js');
-    show(1);
-    // On phones the figure is pinned at the top, so a step counts as "current"
-    // once its text has scrolled up past the lower part of the screen.
-    var phone = window.matchMedia('(max-width: 860px)').matches;
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) { if (e.isIntersecting) show(+e.target.getAttribute('data-step')); });
-    }, { rootMargin: phone ? '-62% 0px -37% 0px' : '-48% 0px -51% 0px' });
-    steps.forEach(function (el) { io.observe(el); });
+    update();
+    var ticking = false;
+    window.addEventListener('scroll', function () {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () { ticking = false; update(); });
+    }, { passive: true });
+    window.addEventListener('resize', update);
   })();
 
   (function () {
