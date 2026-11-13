@@ -39,17 +39,33 @@
 
   // ---------- 3. Results table: filters + crosshair hover ----------
   function initResultsTable() {
-    const table = document.querySelector('.results-table');
+    const table = document.getElementById('discovery-results');
     if (!table) return;
     const rows = Array.from(table.querySelectorAll('tbody tr'));
-    const state = { agg: 'all', fb: 'all' };
+    const state = { fb: 'all' };
+    const agents = rows.filter(r => r.dataset.fb);
+    const delta = table.querySelector('tr.delta');
+    const reportedDeltas = Array.from(delta.cells).slice(1).map(cell => cell.textContent);
+    const humans = rows.filter(r => !r.dataset.fb && r !== delta);
+    const score = cell => Number.parseFloat(cell.textContent);
 
     function apply() {
       rows.forEach(r => {
-        const agg = r.dataset.agg, fb = r.dataset.fb;
-        const show = !agg || // baselines and the delta row are always shown
-          ((state.agg === 'all' || state.agg === agg) && (state.fb === 'all' || state.fb === fb));
+        const fb = r.dataset.fb;
+        const show = !fb || state.fb === 'all' || state.fb === fb;
         r.hidden = !show;
+      });
+      Array.from(delta.cells).slice(1).forEach((cell, i) => {
+        const col = i + 1;
+        const scores = agents.filter(r => !r.hidden).map(r => score(r.cells[col])).filter(Number.isFinite);
+        const bestHuman = Math.max(...humans.map(r => score(r.cells[col])));
+        const difference = state.fb === 'all'
+          ? Number.parseFloat(reportedDeltas[i].replace('−', '-'))
+          : scores.length ? Math.round((Math.max(...scores) - bestHuman) * 100) / 100 : null;
+        cell.textContent = difference === null ? '–' :
+          (difference > 0 ? '+' : difference < 0 ? '−' : '') + Math.abs(difference).toFixed(2);
+        cell.classList.toggle('plus', difference !== null && difference > 0);
+        cell.classList.toggle('minus', difference !== null && difference < 0);
       });
     }
     document.querySelectorAll('.table-filter').forEach(group => {
@@ -61,20 +77,23 @@
         apply();
       });
     });
+    apply();
 
     // Crosshair: highlight the hovered row and column.
-    const colCells = idx => table.querySelectorAll(
-      `tbody tr td:nth-child(${idx + 1}), thead tr:last-child th:nth-child(${idx + 1})`);
-    let lit = [];
-    table.addEventListener('mouseover', e => {
-      const td = e.target.closest('tbody td');
-      lit.forEach(c => c.classList.remove('xhair'));
-      lit = [];
-      if (!td || td.cellIndex === 0) return;
-      lit = Array.from(colCells(td.cellIndex));
-      lit.forEach(c => c.classList.add('xhair'));
+    document.querySelectorAll('.results-table').forEach(table => {
+      const colCells = idx => table.querySelectorAll(
+        `tbody tr td:nth-child(${idx + 1}), thead tr:last-child th:nth-child(${idx + 1})`);
+      let lit = [];
+      table.addEventListener('mouseover', e => {
+        const td = e.target.closest('tbody td');
+        lit.forEach(c => c.classList.remove('xhair'));
+        lit = [];
+        if (!td || td.cellIndex === 0) return;
+        lit = Array.from(colCells(td.cellIndex));
+        lit.forEach(c => c.classList.add('xhair'));
+      });
+      table.addEventListener('mouseleave', () => { lit.forEach(c => c.classList.remove('xhair')); lit = []; });
     });
-    table.addEventListener('mouseleave', () => { lit.forEach(c => c.classList.remove('xhair')); lit = []; });
   }
 
   // ---------- 4. Interactive transfer heatmap ----------

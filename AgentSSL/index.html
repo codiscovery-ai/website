@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="description"
-        content="AgentSSL: we frame semi-supervised learning as a program search problem and study whether MLE agents can leverage unlabeled data.">
+        content="AgentSSL: agents discover SSL programs that outperform human-engineered baselines in 8 of 12 settings. ProgramSelectBench benchmarks reliable program selection with 16,977 programs.">
   <meta name="keywords" content="AgentSSL, semi-supervised learning, MLE agents, program search, LLM agents">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AgentSSL: Can MLE Agents Leverage Unlabeled Data?</title>
@@ -39,32 +39,44 @@
           </div>
           <div class="is-size-5 publication-authors">
             <span class="author-block"><sup>1</sup>Cornell University,</span>
-            <span class="author-block"><sup>2</sup>HHMI Janelia Research Campus</span>
+            <span class="author-block"><sup>2</sup>Howard Hughes Medical Institute</span>
           </div>
+          <div class="is-size-5 publication-authors">NeurIPS 2026</div>
           <div class="is-size-5 publication-authors">
             <span class="eql-cntrb"><sup>*</sup>Equal contribution</span>
           </div>
 
           <div class="column has-text-centered">
             <div class="publication-links">
-              <!-- TODO: set href and remove aria-disabled once the paper is public. -->
               <span class="link-block">
-                <a href="#" aria-disabled="true" class="external-link button is-normal is-rounded is-dark">
+                <a href="./static/pdf/2611.17323v1.pdf"
+                   class="external-link button is-normal is-rounded is-dark">
                   <span class="icon"><i class="fas fa-file-pdf"></i></span>
                   <span>Paper</span>
                 </a>
               </span>
               <span class="link-block">
-                <a href="https://github.com/akanksha-sarkar/AgentSSL" target="_blank"
+                <a href="#" target="_blank" aria-disabled="true"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon"><i class="fab fa-github"></i></span>
                   <span>Code</span>
                 </a>
               </span>
               <span class="link-block">
-                <a href="#" aria-disabled="true" class="external-link button is-normal is-rounded is-dark">
+                <a href="https://arxiv.org/abs/2611.17323"
+                   class="external-link button is-normal is-rounded is-dark">
                   <span class="icon"><i class="ai ai-arxiv"></i></span>
                   <span>arXiv</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://huggingface.co/datasets/ethan-y-lin/ProgramSelectBench"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon" aria-hidden="true">
+                    <img src="https://huggingface.co/front/assets/huggingface_logo-noborder.svg"
+                         alt="" width="20" height="20">
+                  </span>
+                  <span>ProgramSelectBench</span>
                 </a>
               </span>
             </div>
@@ -72,8 +84,10 @@
 
           <div class="callout tldr">
             <span class="icon"><i class="fas fa-lightbulb"></i></span>
-            <span><b>TL;DR</b> MLE agents can discover strong programs that leverage unlabeled data, but reliable
-              program selection remains the bottleneck.</span>
+            <span>
+              <span class="tldr-line"><b>TL;DR</b> MLE agents beat human-engineered SSL baselines in <b>8 of 12 settings</b>.</span>
+              <span class="tldr-line">Program selection remains the bottleneck. We introduce <b>ProgramSelectBench</b> to study it.</span>
+            </span>
           </div>
         </div>
       </div>
@@ -115,18 +129,21 @@
         <h2 class="title is-3 section-title">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            Acquiring high-quality labeled data and engineering effective learning pipelines are two critical
-            bottlenecks to applying machine learning systems in new domains. Although recent MLE agents have shown
-            promise in automating pipeline design, their behavior has been studied almost exclusively in fully
-            supervised settings. In many domains, however, labeled data is expensive while unlabeled data is abundant.
-            In this work, we study agents in the semi-supervised learning (SSL) regime by framing SSL as a program
-            search problem and exploring how agents navigate this space under limited supervision. Our analysis
-            focuses on three questions: (1) whether agents can effectively leverage unlabeled data, (2) how they
-            leverage it and what strategies they discover, and (3) whether they can adapt these strategies to specific
-            domains. We find that agents can leverage and synthesize SSL strategies spanning decades of SSL research,
-            achieving performance comparable to, and in some cases outperforming, established human-engineered SSL
-            methods. We further validate these observations on real-world ecological datasets, highlighting both the
-            challenges and opportunities of transferring agent-discovered strategies beyond controlled benchmarks.
+            Applying machine learning systems to new domains introduces bottlenecks in both labeled data
+            acquisition and manual pipeline engineering. While recent MLE agents show promise in automating
+            pipeline design, they have been studied almost exclusively in fully supervised settings, leaving
+            them untested in realistic regimes where labeled data is scarce but unlabeled data is abundant. In
+            this work, we introduce Agentic Semi-Supervised Learning (<i>AgentSSL</i>), framing SSL as a program
+            search problem and studying how agents navigate this space under limited supervision. We find that
+            even under weak feedback and matched compute, agents can synthesize code that combines and adapts
+            established SSL techniques, exceeding the strongest human-engineered baselines in 8 of 12 settings
+            by up to +21.8%. However, our results identify program selection as a critical bottleneck in
+            AgentSSL, where performance drops by as much as 47% when selecting based on the agent's feedback
+            metric. To systematically study this bottleneck, we introduce <i>ProgramSelectBench</i>, a
+            large-scale benchmark with a combined total of 16,977 agent-generated and human-engineered SSL
+            programs, and evaluate both unsupervised and active program selection methods. We further evaluate
+            AgentSSL on real-world ecology detection tasks, highlighting the opportunities and challenges of
+            transferring agent-discovered strategies beyond controlled benchmarks.
           </p>
         </div>
       </div>
@@ -139,15 +156,11 @@
   <div class="container is-max-desktop">
     <h2 class="title is-3 section-title">Contributions</h2>
     <div class="numbered">
-      <p>1) <b>AgentSSL:</b> we formulate semi-supervised learning as a structured program-search task for MLE agents.</p>
-      <p>2) <b>Strong programs:</b> agents autonomously discover SSL programs competitive with, and in several cases
-        outperforming, established SSL baselines.</p>
-      <p>3) <b>Systematic analysis:</b> agents exploit unlabeled data, explore ideas across classical and modern SSL,
-        and produce diverse, performant solutions.</p>
-      <p>4) <b>An open problem:</b> we identify reliable program selection as the key bottleneck, with an empirical
-        analysis of existing proxy metrics.</p>
-      <p>5) <b>Real-world ecology:</b> we evaluate AgentSSL on animal detection tasks, showing both the potential and
-        the challenges of reducing annotation cost in practice.</p>
+      <p>1) <b>AgentSSL:</b> we introduce Agentic Semi-Supervised Learning, formulating SSL as agentic search over the space of learning programs.</p>
+      <p>2) <b>Strong programs:</b> under weak feedback and matched compute, agents discover SSL programs that outperform established human-engineered baselines in 8 of 12 settings, by up to 21.81 percentage points.</p>
+      <p>3) <b>Systematic analysis:</b> agents discover diverse, domain-adapted programs that combine established SSL techniques and effectively leverage unlabeled data.</p>
+      <p>4) <b>ProgramSelectBench:</b> we identify reliable program selection as an open problem and release a benchmark of 16,977 agent-generated and human-engineered programs for unsupervised and active selection.</p>
+      <p>5) <b>Real-world ecology:</b> we evaluate AgentSSL on animal detection tasks, demonstrating the potential and challenges of reducing annotation and engineering costs in practice.</p>
     </div>
   </div>
 </section>
@@ -160,8 +173,9 @@
     <p class="lead mb-5">
       Given a small labeled set and a larger unlabeled corpus, an LLM-based agent writes SSL programs. Each program is
       scored by an evaluator using either <b>unsupervised SSL metrics</b> or <b>noisy validation</b> feedback, and that
-      fitness guides iterative refinement (Phase I). From the resulting candidate programs, one must then be
-      <b>selected</b> without access to test labels (Phase II).
+      fitness guides iterative refinement (<b>program discovery</b>). From the candidate pool, a program must then be
+      <b>selected</b> using label-free metrics or active model selection that queries a limited number of test labels
+      (<b>program selection</b>).
     </p>
     <div class="figure-card">
       <img src="./static/images/agent_main_figure.png"
@@ -169,7 +183,9 @@
     </div>
     <p class="caption">
       We evaluate AgentSSL on six image-classification SSL benchmarks (DTD, SUN397, RESISC45, Retinopathy, CLEVR,
-      KITTI) and two real-world ecological detection tasks (WildFin, BuckTales).
+      KITTI) and two real-world ecological detection tasks (WildFin, BuckTales). Classification experiments use
+      CLIP ViT-B-16 and DINOv2-B backbones, three random data splits per setting, and compute budgets matched to
+      baseline costs: 8 hours for DTD, RESISC45, and KITTI; 15 hours for SUN397, Retinopathy, and CLEVR.
     </p>
   </div>
 </section>
@@ -183,15 +199,10 @@
       Across datasets and shot settings, the best agent solution
       (<span style="color:#A18600;font-weight:700">A<sub>best</sub></span>) is generally comparable to the best
       human-engineered SSL baseline (<span style="color:#846DA3;font-weight:700">H<sub>best</sub></span>), and
-      outperforms it on several, by up to <b>+15.8</b> points on Retinopathy.
+      outperforms it in <b>8 of 12 settings</b>, by up to <b>+21.81 percentage points</b> on Retinopathy,
+      even when search feedback is weakly or negatively correlated with test accuracy.
     </p>
     <div class="table-controls">
-      <div class="table-filter" data-key="agg" role="group" aria-label="Agent runs">
-        <span class="filter-label">Agent runs:</span>
-        <button type="button" data-value="all" aria-pressed="true">All</button>
-        <button type="button" data-value="avg" aria-pressed="false">Mean over runs</button>
-        <button type="button" data-value="max" aria-pressed="false">Best run</button>
-      </div>
       <div class="table-filter" data-key="fb" role="group" aria-label="Agent feedback">
         <span class="filter-label">Feedback:</span>
         <button type="button" data-value="all" aria-pressed="true">Both</button>
@@ -201,36 +212,96 @@
       <span class="hint">Hover a cell to trace its column.</span>
     </div>
     <div class="results-wrap">
-      <table class="results-table">
+      <table class="results-table" id="discovery-results" aria-label="Table 1: Oracle test accuracy">
         <thead>
           <tr><th></th><th colspan="2" class="grp">DTD</th><th colspan="2" class="grp">SUN397</th><th colspan="2" class="grp">RESISC45</th><th colspan="2" class="grp">RETINO</th><th colspan="2" class="grp">CLEVR</th><th colspan="2" class="grp">KITTI</th></tr>
           <tr><th>Method</th><th class="grp">3</th><th>6</th><th class="grp">3</th><th>6</th><th class="grp">1</th><th>2</th><th class="grp">40</th><th>80</th><th class="grp">10</th><th>20</th><th class="grp">5</th><th>10</th></tr>
         </thead>
         <tbody>
-          <tr><td>Supervised</td><td class="grp">58.35</td><td>66.68</td><td class="grp">62.06</td><td>68.74</td><td class="grp">56.08</td><td>71.11</td><td class="h grp">53.86</td><td class="h">57.64</td><td class="grp">40.30</td><td>48.24</td><td class="h grp">45.05</td><td class="h">47.07</td></tr>
-          <tr><td>FixMatch</td><td class="grp">58.16</td><td>67.09</td><td class="grp">56.72</td><td>64.22</td><td class="grp">62.13</td><td>81.61</td><td class="grp">38.72</td><td>41.66</td><td class="grp">38.93</td><td>56.32</td><td class="grp">39.76</td><td>43.09</td></tr>
-          <tr><td>SoftMatch</td><td class="grp">62.59</td><td>69.17</td><td class="h grp">69.63</td><td class="h">73.18</td><td class="h grp">73.83</td><td class="h">86.54</td><td class="grp">45.95</td><td>54.83</td><td class="h grp">46.48</td><td class="h">67.83</td><td class="grp">37.79</td><td>43.04</td></tr>
-          <tr><td>PET</td><td class="grp">60.64</td><td>67.92</td><td class="grp">63.63</td><td>68.19</td><td class="grp">64.16</td><td>77.88</td><td class="grp">26.47</td><td>37.97</td><td class="grp">33.34</td><td>34.31</td><td class="grp">39.01</td><td>42.99</td></tr>
-          <tr><td>V-PET</td><td class="h grp">64.84</td><td class="h">70.25</td><td class="grp">66.58</td><td>71.70</td><td class="grp">62.99</td><td>77.16</td><td class="grp">20.45</td><td>29.60</td><td class="grp">32.57</td><td>33.60</td><td class="grp">39.66</td><td>37.04</td></tr>
-          <tr class="agent" data-agg="avg" data-fb="U"><td>AgentSSL<sub>avg</sub><sup>U</sup></td><td class="grp">65.44</td><td>72.32</td><td class="grp">67.09</td><td>70.86</td><td class="grp">71.53</td><td>78.10</td><td class="grp">40.98</td><td>63.59</td><td class="grp">35.58</td><td>43.68</td><td class="a grp">47.35</td><td>47.40</td></tr>
-          <tr class="agent" data-agg="avg" data-fb="N"><td>AgentSSL<sub>avg</sub><sup>N</sup></td><td class="grp">65.57</td><td>71.45</td><td class="grp">66.26</td><td>70.59</td><td class="grp">–</td><td>76.06</td><td class="a grp">56.62</td><td>58.79</td><td class="grp">42.36</td><td>42.65</td><td class="grp">42.71</td><td>45.85</td></tr>
-          <tr class="agent" data-agg="max" data-fb="U"><td>AgentSSL<sub>max</sub><sup>U</sup></td><td class="a grp">68.44</td><td class="a">73.79</td><td class="grp">68.57</td><td class="a">72.78</td><td class="a grp">76.20</td><td class="a">80.94</td><td class="grp">41.54</td><td>55.02</td><td class="grp">44.04</td><td>45.87</td><td class="grp">40.09</td><td class="a">47.53</td></tr>
-          <tr class="agent" data-agg="max" data-fb="N"><td>AgentSSL<sub>max</sub><sup>N</sup></td><td class="grp">64.71</td><td>72.10</td><td class="a grp">69.12</td><td>71.15</td><td class="grp">–</td><td>76.90</td><td class="grp">36.97</td><td class="a">73.47</td><td class="a grp">48.99</td><td class="a">53.36</td><td class="grp">39.19</td><td>42.84</td></tr>
-          <tr class="delta"><td><span class="a">A<sub>best</sub></span> − <span class="h">H<sub>best</sub></span></td><td class="plus grp">+3.60</td><td class="plus">+3.54</td><td class="minus grp">−0.51</td><td class="minus">−0.40</td><td class="plus grp">+3.37</td><td class="minus">−5.60</td><td class="plus grp">+2.76</td><td class="plus">+15.83</td><td class="plus grp">+2.51</td><td class="minus">−14.47</td><td class="plus grp">+2.30</td><td class="plus">+0.46</td></tr>
+          <tr><td>Supervised</td><td class="grp">61.47</td><td>70.23</td><td class="grp">63.35</td><td>70.54</td><td class="grp">55.71</td><td>70.98</td><td class="grp h">50.66</td><td>51.48</td><td class="grp">39.96</td><td>46.62</td><td class="grp h">41.54</td><td class="h">45.66</td></tr>
+          <tr><td>FixMatch</td><td class="grp">60.71</td><td>70.12</td><td class="grp">63.10</td><td>70.90</td><td class="grp">62.13</td><td>81.60</td><td class="grp">34.93</td><td>39.70</td><td class="grp">38.93</td><td>56.32</td><td class="grp">39.05</td><td>42.76</td></tr>
+          <tr><td>SoftMatch</td><td class="grp">62.59</td><td>69.80</td><td class="grp h">69.68</td><td class="h">73.29</td><td class="grp">73.17</td><td>86.04</td><td class="grp">44.14</td><td class="h">54.37</td><td class="grp h">46.48</td><td class="h">66.83</td><td class="grp">40.04</td><td>41.30</td></tr>
+          <tr><td>FineSSL</td><td class="grp">65.83</td><td class="h">73.00</td><td class="grp">68.41</td><td>72.33</td><td class="grp h">76.13</td><td class="h">86.93</td><td class="grp">27.47</td><td>27.43</td><td class="grp">34.21</td><td>47.54</td><td class="grp">40.74</td><td>37.22</td></tr>
+          <tr><td>PET</td><td class="grp">65.43</td><td>71.97</td><td class="grp">63.94</td><td>68.19</td><td class="grp">60.48</td><td>78.31</td><td class="grp">30.45</td><td>32.77</td><td class="grp">33.34</td><td>34.31</td><td class="grp">39.01</td><td>42.80</td></tr>
+          <tr><td>V-PET</td><td class="grp h">66.03</td><td>72.87</td><td class="grp">66.87</td><td>71.92</td><td class="grp">60.94</td><td>76.99</td><td class="grp">24.12</td><td>29.13</td><td class="grp">38.07</td><td>35.17</td><td class="grp">39.29</td><td>41.02</td></tr>
+          <tr class="agent" data-fb="N"><td>AgentSSL<sup>N</sup></td><td class="grp">65.50</td><td>72.38</td><td class="grp a">69.14</td><td>70.90</td><td class="grp">–</td><td>79.82</td><td class="grp a">72.47</td><td class="a">73.47</td><td class="grp a">51.57</td><td class="a">52.92</td><td class="grp">48.52</td><td>50.21</td></tr>
+          <tr class="agent" data-fb="U"><td>AgentSSL<sup>U</sup></td><td class="grp a">68.94</td><td class="a">73.76</td><td class="grp">68.46</td><td class="a">72.36</td><td class="grp a">79.80</td><td class="a">80.98</td><td class="grp">50.73</td><td>49.65</td><td class="grp">43.43</td><td>52.81</td><td class="grp a">49.74</td><td class="a">53.45</td></tr>
+          <tr class="delta" aria-live="polite"><td><span class="a">A<sub>best</sub></span> − <span class="h">H<sub>best</sub></span></td><td class="grp plus">+2.91</td><td class="plus">+0.76</td><td class="grp minus">−0.54</td><td class="minus">−0.93</td><td class="grp plus">+3.67</td><td class="minus">−5.95</td><td class="grp plus">+21.81</td><td class="plus">+19.10</td><td class="grp plus">+5.09</td><td class="minus">−13.92</td><td class="grp plus">+8.20</td><td class="plus">+7.78</td></tr>
         </tbody>
       </table>
     </div>
     <p class="caption">
-      Few-shot accuracy (oracle test-set selection) by dataset and labels per class. Best human-engineered SSL
+      Oracle test accuracy (%) by dataset and labels per class. Each program is evaluated on all three data splits;
+      the best program is selected by its average test accuracy across splits. Best human-engineered SSL
       baseline per column in <span style="color:#846DA3;font-weight:700">purple</span>, best agent result in
       <span style="color:#A18600;font-weight:700">gold</span>. <sup>U</sup>: unsupervised-metric feedback;
-      <sup>N</sup>: noisy-validation feedback; <sub>avg</sub>/<sub>max</sub>: mean / best over runs.
+      <sup>N</sup>: noisy-validation feedback. A dash marks the unavailable 1-shot noisy-validation setting.
+      A<sub>best</sub> − H<sub>best</sub> compares the best agent under the selected feedback filter with the best human baseline.
+      Both shows the paper’s reported differences; individual feedback views recompute them from the displayed, rounded accuracies.
+    </p>
+    <h3 class="title is-4 mt-6" id="program-selection">Can we reliably select the best program?</h3>
+    <p class="lead mb-5">
+      Discovering a strong program is only part of the challenge. Selecting with weak feedback can lose up to
+      <b>47.29 percentage points</b> relative to oracle selection. When feedback aligns with test accuracy,
+      much of the oracle performance is retained; when it does not, selection can fail substantially.
+    </p>
+    <div class="results-wrap">
+      <table class="results-table" id="selection-regret" aria-label="Table 2: Selection regret">
+        <thead>
+          <tr><th></th><th colspan="2" class="grp">DTD</th><th colspan="2" class="grp">SUN397</th><th colspan="2" class="grp">RESISC45</th><th colspan="2" class="grp">RETINO</th><th colspan="2" class="grp">CLEVR</th><th colspan="2" class="grp">KITTI</th></tr>
+          <tr><th>Method</th><th class="grp">3</th><th>6</th><th class="grp">3</th><th>6</th><th class="grp">1</th><th>2</th><th class="grp">40</th><th>80</th><th class="grp">10</th><th>20</th><th class="grp">5</th><th>10</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Human<sub>all</sub></td><td class="grp regret-a">−3.39</td><td class="regret-a">−2.87</td><td class="grp regret-a">−4.69</td><td class="regret-a">−1.69</td><td class="grp regret-b">−14.63</td><td class="regret-a">−1.93</td><td class="grp regret-c">−23.92</td><td class="regret-d">−42.66</td><td class="grp regret-c">−15.59</td><td class="regret-c">−20.28</td><td class="grp regret-b">−9.10</td><td class="regret-c">−17.53</td></tr>
+<tr class="agent"><td>AgentSSL<sup>N</sup></td><td class="grp regret-a">−0.67</td><td class="regret-a">−2.34</td><td class="grp regret-a">−0.13</td><td class="regret-a">−0.13</td><td class="grp">–</td><td class="regret-b">−10.38</td><td class="grp regret-d">−38.12</td><td class="regret-d">−47.29</td><td class="grp regret-a">0.00</td><td class="regret-a">−2.66</td><td class="grp regret-b">−8.20</td><td class="regret-c">−19.83</td></tr>
+<tr class="agent"><td>AgentSSL<sup>U</sup></td><td class="grp regret-a">−3.81</td><td class="regret-b">−10.74</td><td class="grp regret-a">−1.90</td><td class="regret-a">−3.60</td><td class="grp regret-b">−14.43</td><td class="regret-a">−2.25</td><td class="grp regret-c">−24.12</td><td class="regret-c">−18.62</td><td class="grp regret-b">−13.56</td><td class="regret-a">−3.23</td><td class="grp regret-b">−10.50</td><td class="regret-c">−20.96</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="caption">
+      Table 2. Selection regret averaged across seeds, shown as the change in accuracy from oracle selection
+      (percentage points; closer to zero is better). Human<sub>all</sub> selects across all human algorithms and
+      hyperparameters using the <b>rank</b> metric; agent rows select programs within a single trajectory using
+      their feedback metric. <sup>N</sup>: noisy validation; <sup>U</sup>: unsupervised metrics.
+      Darker red indicates a larger loss. A dash marks the unavailable 1-shot noisy-validation setting.
+    </p>
+
+    <h3 class="title is-4 mt-6" id="active-selection">Can active model selection help?</h3>
+    <p class="lead mb-5">
+      When unsupervised metrics fail, spending labels on <b>program selection</b> can be more valuable than
+      spending them all on training. Under a fixed label budget, splitting labels evenly between training and
+      selection yields gains of up to <b>26.07 percentage points</b> on Retinopathy and <b>14.63</b> on KITTI,
+      but costs accuracy on datasets where unsupervised selection already works.
+    </p>
+    <div class="results-wrap">
+      <table class="results-table" id="active-selection-results" aria-label="Table 3: Label allocation for active selection">
+        <thead>
+          <tr><th>Method</th><th>DTD</th><th>SUN397</th><th>RESISC45</th><th>RETINO</th><th>CLEVR</th><th>KITTI</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>ActiveTesting</td><td class="minus">−2.35</td><td class="minus">−1.17</td><td class="minus">−2.61</td><td class="plus">+25.59</td><td class="minus">−5.41</td><td class="plus">+10.46</td></tr>
+<tr><td>VMA</td><td class="minus">−1.86</td><td class="minus">−1.47</td><td class="minus">−7.68</td><td class="plus">+26.07</td><td class="minus">−4.49</td><td class="plus">+14.43</td></tr>
+<tr><td>CODA</td><td class="minus">−2.50</td><td class="minus">−2.09</td><td class="minus">−0.87</td><td class="plus">+21.22</td><td class="minus">−29.09</td><td class="plus">+14.63</td></tr>
+<tr><td>IID</td><td class="minus">−4.71</td><td class="minus">−0.83</td><td class="minus">−3.47</td><td class="plus">+26.07</td><td class="minus">−5.75</td><td class="plus">+10.01</td></tr>
+<tr><td>ModelSelector</td><td class="minus">−2.32</td><td class="minus">−0.87</td><td class="minus">−13.21</td><td class="plus">+18.70</td><td class="minus">−2.05</td><td class="plus">+0.00</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="caption">
+      Table 3. Change in final selection accuracy (percentage points) on AgentSSL unsupervised-feedback runs:
+      50% of labels for training / 50% for active selection minus 100% for training / 0% for unsupervised selection.
+      Green indicates an improvement; red indicates a loss. IID, ActiveTesting, VMA, and ModelSelector are averaged
+      over 10 active-selection runs; CODA is deterministic.
     </p>
     <div class="callout mt-5">
       <span class="icon"><i class="fas fa-lightbulb"></i></span>
-      <span>The bottleneck is not <em>generating</em> good SSL programs, but <em>selecting</em> among them. When
-        unsupervised selection metrics correlate with test accuracy, AgentSSL keeps much of its oracle performance;
-        when they don't, it drops substantially.</span>
+      <span>Reliable <b>program selection</b> remains the bottleneck: selecting with the agent’s feedback metric
+        can lose up to <b>47.29 percentage points</b> relative to oracle selection.
+        <a href="https://huggingface.co/datasets/ethan-y-lin/ProgramSelectBench">ProgramSelectBench</a> provides
+        <b>16,977 evaluated program instances</b> across 35 tasks, representing over 10,000 GPU hours,
+        to study selection independently of program discovery. Splitting the label budget evenly between training
+        and active selection improves accuracy where unsupervised metrics fail, but costs accuracy where they
+        already work.</span>
     </div>
   </div>
 </section>
@@ -291,7 +362,7 @@
     <h3 class="title is-4">Are programs tailored to their domain?</h3>
     <p class="lead mb-5">
       Agents can discover <b>dataset-specific</b> strategies instead of relying on one fixed SSL recipe. The best
-      program for each dataset does not generalize to other datasets, evidence that it is tailored to its own domain.
+      programs discovered for one dataset often transfer poorly to others, evidence that they are adapted to their source domain.
     </p>
     <div class="figure-card">
       <div id="transfer-heatmap"></div>
@@ -303,7 +374,7 @@
       <span class="icon"><i class="fas fa-eye"></i></span>
       <span>On <b>Retinopathy</b>, the best program trains no classifier at all. It uses frozen DINOv2 features,
         nearest-neighbor evidence, class prototypes and an explicit <b>ordinal</b> bias, matching the fact that labels
-        are ordered disease-severity levels. It beats the next-best baseline by <b>15%</b>.</span>
+        are ordered disease-severity levels. In the 80-labels-per-class setting, it beats the next-best baseline by <b>19.10 percentage points</b>.</span>
     </div>
     <details class="program" id="retino-program">
       <summary><span class="chev"><i class="fas fa-chevron-right"></i></span>
@@ -813,12 +884,15 @@ class ClassificationAgent:
       <div class="column is-5">
         <p class="lead">
           We evaluate AgentSSL on animal detection from two ecological pipelines, <b>WildFin</b> (fish) and
-          <b>BuckTales</b> (antelope), against the domain experts' YOLOv8 pipelines using small labeled subsets.
+          <b>BuckTales</b> (antelope). Agents use only <b>10%</b> of the labeled training data on WildFin and
+          <b>20%</b> on BuckTales. We compare AgentSSL, supervised-only <b>AgentSL</b>, and expert pipelines
+          trained on either the same labeled subset or the full training split.
         </p>
         <p class="lead mt-3">
-          On WildFin, agents outperform the low-label expert baseline and approach the full-data pipeline. On
-          BuckTales they only match it: the expert solution relies on very high-resolution inputs, while agents spend
-          their budget on more complex tiling and SSL strategies.
+          On WildFin, AgentSL and AgentSSL outperform the low-label expert baseline and approach the full-data
+          expert pipeline. On BuckTales, both match the low-label baseline but show high variance and underperform
+          the full-data expert YOLOv8 baseline. Their similar performance suggests that strong supervised design
+          choices can be as valuable as unlabeled data; future agents should explore both.
         </p>
       </div>
       <div class="column is-7">
@@ -835,8 +909,18 @@ class ClassificationAgent:
 <section class="section reveal" id="BibTeX">
   <div class="container is-max-desktop content">
     <h2 class="title is-3">BibTeX</h2>
-    <!-- TODO: add the official BibTeX (and restore the copy button) once the paper is on arXiv. -->
-    <p class="caption">Citation coming soon.</p>
+    <div class="bibtex-wrap">
+      <button class="copy-btn" type="button" data-copy="#bibtex-code" aria-label="Copy BibTeX citation"><span class="copy-label">Copy</span></button>
+      <pre><code id="bibtex-code">@misc{lin2026agentsslmleagentsleverage,
+  title={AgentSSL: Can MLE Agents Leverage Unlabeled Data?},
+  author={Ethan Lin and Akanksha Sarkar and Ziang Liu and Kristin Branson and Jennifer J. Sun},
+  year={2026},
+  eprint={2611.17323},
+  archivePrefix={arXiv},
+  primaryClass={cs.AI},
+  url={https://arxiv.org/abs/2611.17323},
+}</code></pre>
+    </div>
   </div>
 </section>
 

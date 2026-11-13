@@ -93,6 +93,7 @@ a:hover { color: var(--purple-dark); }
   color: var(--ink);
 }
 .callout .icon { color: var(--gold); font-size: 1.3rem; margin-top: 0.15rem; }
+.callout.tldr { width: fit-content; max-width: 60rem; margin-left: auto; margin-right: auto; }
 
 /* ---------- results table ---------- */
 .results-wrap {
@@ -127,6 +128,10 @@ a:hover { color: var(--purple-dark); }
 .results-table .a { color: var(--gold); font-weight: 700; }
 .results-table .plus { color: var(--plus); }
 .results-table .minus { color: var(--minus); }
+.results-table .regret-a { color: #D98C8C; }
+.results-table .regret-b { color: #CC5555; }
+.results-table .regret-c { color: #B22222; }
+.results-table .regret-d { color: #7A0000; }
 .results-table sub, .results-table sup { font-weight: 400; color: #555; }
 
 /* ---------- bibtex / footer ---------- */
@@ -306,9 +311,10 @@ body.no-scroll { overflow: hidden; }
   .hm-cell, .reveal { transition: none; }
 }
 
-/* Keep the title and TL;DR on one line on wide screens; let them wrap on smaller ones. */
+/* Keep the title on one line and the TL;DR on two on wide screens. */
 .publication-title { font-size: clamp(2rem, 3.3vw, 3rem) !important; }
-.callout.tldr { width: fit-content; max-width: 100%; margin-left: auto; margin-right: auto; }
+.callout.tldr { max-width: min(60rem, 100%); }
 @media screen and (min-width: 1150px) {
-  .publication-title, .callout.tldr { white-space: nowrap; }
+  .publication-title { white-space: nowrap; }
+  .tldr-line { display: block; white-space: nowrap; }
 }
